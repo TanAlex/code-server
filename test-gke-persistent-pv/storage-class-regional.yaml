@@ -1,0 +1,20 @@
+# reference: https://cloud.google.com/kubernetes-engine/docs/how-to/persistent-volumes/regional-pd#manual-provisioning
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: regional-gce-pd
+provisioner: kubernetes.io/gce-pd
+volumeBindingMode: Immediate
+allowVolumeExpansion: true
+reclaimPolicy: Delete  # set to Retain if you want to keep the disk when pv/pvc is deleted
+parameters:
+  type: pd-standard
+  fstype: ext4
+  replication-type: regional-pd
+volumeBindingMode: WaitForFirstConsumer
+allowedTopologies:
+- matchLabelExpressions:
+  - key: topology.gke.io/zone
+    values:
+    - northamerica-northeast1-a
+    - northamerica-northeast1-b

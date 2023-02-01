@@ -1,0 +1,12 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: zonal-gce-pd
+provisioner: kubernetes.io/gce-pd
+volumeBindingMode: Immediate
+allowVolumeExpansion: true
+reclaimPolicy: Delete     # set to Retain if you want to keep the disk when pv/pvc is deleted
+parameters:
+  type: pd-standard       # pd-ssd pd-standard or pd-balanced
+  fstype: ext4
+  replication-type: none  # If you don’t specify regional-pd, it defaults to a zonal disk

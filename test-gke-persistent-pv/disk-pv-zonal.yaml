@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: app-storage
+spec:
+  storageClassName: zonal-gce-pd
+  capacity:
+    storage: 50
+  accessModes:
+    - ReadWriteOnce
+  claimRef:
+    namespace: default
+    name: app-storage-claim
+  gcePersistentDisk:
+    pdName: gke-pv
+    fsType: ext4
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: app-storage-claim
+spec:
+  storageClassName: zonal-gce-pd
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50

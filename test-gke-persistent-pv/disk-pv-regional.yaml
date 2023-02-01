@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: app-storage
+spec:
+  storageClassName: regional-gce-pd
+  capacity:
+    storage: 200
+  accessModes:
+    - ReadWriteOnce
+  claimRef:
+    namespace: default
+    name: app-storage-claim
+  gcePersistentDisk:
+    pdName: my-regional-disk-1
+    fsType: ext4
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: topology.kubernetes.io/zone
+          operator: In
+          values:
+          - northamerica-northeast1-b
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: app-storage-claim
+spec:
+  storageClassName: regional-gce-pd
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 200
